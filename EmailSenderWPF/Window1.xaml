@@ -7,9 +7,9 @@
         mc:Ignorable="d"
         Title="Window1" Height="232" Width="800">
     <Grid>
-        <TextBox HorizontalAlignment="Left" Margin="60,26,0,0" TextWrapping="Wrap" Text="Адресс Почты" VerticalAlignment="Top" Width="178" TextChanged="TextBox_TextChanged"/>
-        <TextBox TextWrapping="Wrap" Text="Пароль" Margin="60,64,562,128"/>
-        <Button Content="Зарегестрироваться" HorizontalAlignment="Left" Margin="292,142,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="Email" HorizontalAlignment="Left" Margin="60,26,0,0" TextWrapping="Wrap" Text="Адресс Почты" VerticalAlignment="Top" Width="178" TextChanged="TextBox_TextChanged"/>
+        <TextBox x:Name="Password" TextWrapping="Wrap"  Margin="60,56,562,136"/>
+        <Button x:Name="Login" Content="Логин" HorizontalAlignment="Left" Margin="60,93,0,0" VerticalAlignment="Top" Width="178" Click="Login_Click"/>
 
     </Grid>
 </Window>

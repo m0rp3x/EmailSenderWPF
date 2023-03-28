@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Text.Json;
 
 namespace EmailSenderWPF
 {
@@ -27,6 +29,27 @@ namespace EmailSenderWPF
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
 
+        }
+
+        
+
+        private async void Login_Click(object sender, RoutedEventArgs e)
+        {
+
+            this.DialogResult = true;
+        }
+    }
+
+    public class AccountJson
+    {
+        public string Email { get; set; }
+        
+        public string Password { get; set; }
+
+        public AccountJson(string email, string password)
+        {
+            Email = email;
+            Password = password;
         }
     }
 }

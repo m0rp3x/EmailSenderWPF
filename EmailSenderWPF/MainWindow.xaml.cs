@@ -15,13 +15,16 @@ using System.Windows.Shapes;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Win32;
+using System.IO;
+using System.Text.Json;
 
 namespace EmailSenderWPF
 {
     public partial class MainWindow : Window
     {
-        // Инициализируем само сообщение вне кода дабы область видимости распостранялась на все кнопки
+        // Инициализируем само сообщение вне кода дабы область видимости распостранялась на все кнопки, тоже самое и с модальным окном для логина и регистрации
         MailMessage message = new MailMessage();
+        Window1 passwordWindow = new Window1();
 
         public MainWindow()
         {
@@ -34,7 +37,7 @@ namespace EmailSenderWPF
             try
             {
                 //Здесь сам скелет письма, от кого оно, кому оно идет, тема письма и само письмо
-                message.From = new MailAddress("kovalevasvetlana@live.com");
+                message.From = new MailAddress(passwordWindow.Email.Text);
                 message.To.Add(new MailAddress(ToTextBox.Text));
                 message.Subject = SubjectTextBox.Text;
                 message.Body = BodyTextBox.Text;
@@ -45,7 +48,7 @@ namespace EmailSenderWPF
                 smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-                smtpClient.Credentials = new NetworkCredential("kovalevasvetlana@live.com", "16092009aB");
+                smtpClient.Credentials = new NetworkCredential(passwordWindow.Email.Text, passwordWindow.Password.Text);
                 //отправка
                 smtpClient.Send(message);
                 MessageBox.Show("Письмо отправлено");
@@ -54,7 +57,7 @@ namespace EmailSenderWPF
             {
                 //дебагер без дебагера
                 MessageBox.Show("Произошла ошибка при отправке письма: " + ex.Message);
-                 }
+            }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -68,9 +71,9 @@ namespace EmailSenderWPF
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.Multiselect = true;
 
-            if(openFileDialog1.ShowDialog() == true)
+            if (openFileDialog1.ShowDialog() == true)
             {
-                foreach(string file in openFileDialog1.FileNames)
+                foreach (string file in openFileDialog1.FileNames)
                 {
                     Attachment attachment = new Attachment(file);
                     message.Attachments.Add(attachment);
@@ -79,6 +82,60 @@ namespace EmailSenderWPF
             }
 
         }
-    }
-}
 
+        private async void LoginReg_Click(object sender, RoutedEventArgs e)
+        {
+            
+
+            if (passwordWindow.ShowDialog() == true)
+            {
+
+                using (FileStream fs = new FileStream("user.json", FileMode.OpenOrCreate))
+                {
+                    AccountJson? person = await JsonSerializer.DeserializeAsync<AccountJson>(fs);
+
+
+                    if (passwordWindow.Email.Text == person?.Email && passwordWindow.Password.Text == person?.Password)
+                    {
+                        MessageBox.Show("Успешный вход");
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Неправильный Email или Пароль");
+                    }
+                }
+
+
+            }
+        }
+
+        private async void Registration_Click(object sender, RoutedEventArgs e)
+        {
+            Window1 passwordWindow = new Window1();
+
+            if (passwordWindow.ShowDialog() == true)
+            {
+
+                try
+                {
+
+
+                    await using (FileStream fs = new FileStream("user.json", FileMode.OpenOrCreate))
+                    {
+                        AccountJson accountJson = new AccountJson(passwordWindow.Email.Text,passwordWindow.Password.Text);
+                        await JsonSerializer.SerializeAsync<AccountJson>(fs, accountJson);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    MessageBox.Show(exception.ToString());
+                    throw;
+                }
+
+
+            }
+        }
+    }
+
+}

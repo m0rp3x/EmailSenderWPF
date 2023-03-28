@@ -7,11 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="ToTextBox" HorizontalAlignment="Left" Margin="152,51,0,0" TextWrapping="Wrap" Text="Кому" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="ToTextBox" HorizontalAlignment="Left" Margin="10,51,0,0" TextWrapping="Wrap" Text="Кому" VerticalAlignment="Top" Width="262"/>
         <TextBox x:Name="SubjectTextBox" HorizontalAlignment="Left" Margin="10,74,0,0" TextWrapping="Wrap" Text="Тема Письма" VerticalAlignment="Top" Width="262" TextChanged="TextBox_TextChanged"/>
         <TextBox x:Name="BodyTextBox" HorizontalAlignment="Left" Margin="10,97,0,0" TextWrapping="Wrap" Text="Текст Письма" VerticalAlignment="Top" Width="709" Height="282" TextChanged="TextBox_TextChanged"/>
         <Button x:Name="zalupka321" Content="Отправить" HorizontalAlignment="Left" Margin="10,393,0,0" VerticalAlignment="Top" Width="131" Click="zalupka321_Click"/>
-        <Button Content="Прикрепить файл" HorizontalAlignment="Left" Margin="172,393,0,0" VerticalAlignment="Top" Width="100" Click="Button_Click"/>
+        <Button Content="Прикрепить файл" HorizontalAlignment="Left" Margin="146,393,0,0" VerticalAlignment="Top" Width="126" Click="Button_Click"/>
+        <Button x:Name="Login" Content="Вход" HorizontalAlignment="Left" Margin="277,393,0,0" VerticalAlignment="Top" Width="87" Click="LoginReg_Click"/>
+        <Button x:Name="Registration" Content="Регистрация" HorizontalAlignment="Left" Margin="369,393,0,0" VerticalAlignment="Top" Width="98" Click="Registration_Click"/>
 
     </Grid>
 </Window>
