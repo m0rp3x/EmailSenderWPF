@@ -17,6 +17,8 @@ using System.Net.Mail;
 using Microsoft.Win32;
 using System.IO;
 using System.Text.Json;
+using System.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EmailSenderWPF
 {
@@ -32,7 +34,8 @@ namespace EmailSenderWPF
 
         }
         // Кнопка которая отвечает за отправку письма, в ней письмо формируется, а также задаются параметры входа в почту и настраивается сервер
-        public void zalupka321_Click(object sender, RoutedEventArgs e)
+        //теперь этот метод асинхроннен
+        public async void zalupka321_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -50,7 +53,7 @@ namespace EmailSenderWPF
                 smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
                 smtpClient.Credentials = new NetworkCredential(passwordWindow.Email.Text, passwordWindow.Password.Text);
                 //отправка
-                smtpClient.Send(message);
+                await smtpClient.SendMailAsync(message);
                 MessageBox.Show("Письмо отправлено");
             }
             catch (Exception ex)
@@ -65,10 +68,21 @@ namespace EmailSenderWPF
 
         }
         //кнопка отвечающая за прикрепления файлов, использует обычный встроенный метод для открытия проводника, файлов можно крепить сколького угодно
+        //теперь кнопка только запускает поток с методом который отвечает за прекрепление файлов FileDrop
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+
+            Thread FileDrops = new Thread(FileDrop);
+            FileDrops.Start();
+
+        }
+
+        public void FileDrop()
+        {
+
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
+
             openFileDialog1.Multiselect = true;
 
             if (openFileDialog1.ShowDialog() == true)
@@ -80,7 +94,6 @@ namespace EmailSenderWPF
                     MessageBox.Show($"Вы прекрепили {file}");
                 }
             }
-
         }
 
         private async void LoginReg_Click(object sender, RoutedEventArgs e)
@@ -110,9 +123,11 @@ namespace EmailSenderWPF
             }
         }
 
-        private async void Registration_Click(object sender, RoutedEventArgs e)
+         async void Registration_Click(object sender, RoutedEventArgs e)
         {
             Window1 passwordWindow = new Window1();
+
+            
 
             if (passwordWindow.ShowDialog() == true)
             {
